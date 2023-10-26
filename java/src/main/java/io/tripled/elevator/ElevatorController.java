@@ -10,24 +10,19 @@ public class ElevatorController {
 
     public void handleCall(ElevatorCall call) {
         //TODO
-        while(currentElevatorFloor != call.callOrigin()){
-            if(currentElevatorFloor < call.callOrigin()){
-                moveElevatorOneFloor(Direction.UP);
-            } else if(currentElevatorFloor > call.callOrigin()){
-                moveElevatorOneFloor(Direction.DOWN);
+        moveElevatorToTarget(call.callOrigin());
+        moveElevatorToTarget(call.callDestination());
+    }
+
+    private void moveElevatorToTarget(int targetFloor) {
+        while(currentElevatorFloor != targetFloor){
+            if(currentElevatorFloor < targetFloor){
+                moveElevatorOneFloor(ElevatorAction.UP);
+            } else if(currentElevatorFloor > targetFloor){
+                moveElevatorOneFloor(ElevatorAction.DOWN);
             }
         }
-        System.out.println("<DING> - door open at " + FloorParser.FLOOR_PARSER.toText(currentElevatorFloor));
-
-        while(currentElevatorFloor != call.callDestination()){
-            if(currentElevatorFloor < call.callDestination()){
-                moveElevatorOneFloor(Direction.UP);
-            } else if(currentElevatorFloor > call.callDestination()){
-                moveElevatorOneFloor(Direction.DOWN);
-            }
-        }
-        System.out.println("<DING> - door open at " + FloorParser.FLOOR_PARSER.toText(currentElevatorFloor));
-
+        System.out.println(ElevatorStateParser.ELEVATOR_STATE_PARSER.printElevatorState(ElevatorAction.OPEN_DOORS, currentElevatorFloor));
     }
 
     public int getCurrentElevatorFloor() {
@@ -35,13 +30,14 @@ public class ElevatorController {
         return currentElevatorFloor;
     }
 
-    public void moveElevatorOneFloor(Direction direction) {
-
-        if(direction == Direction.UP && currentElevatorFloor < topFloor){
+    public void moveElevatorOneFloor(ElevatorAction elevatorAction) {
+        if(elevatorAction == ElevatorAction.UP && currentElevatorFloor < topFloor){
             currentElevatorFloor++;
-        } else if(direction == Direction.DOWN && currentElevatorFloor > bottomFloor){
+        } else if(elevatorAction == ElevatorAction.DOWN && currentElevatorFloor > bottomFloor){
             currentElevatorFloor--;
+        } else {
+            return;
         }
-        System.out.println("Elevator at "+ FloorParser.FLOOR_PARSER.toText(currentElevatorFloor));
+        System.out.println(ElevatorStateParser.ELEVATOR_STATE_PARSER.printElevatorState(elevatorAction, currentElevatorFloor));
     }
 }

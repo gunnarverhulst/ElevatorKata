@@ -1,7 +1,7 @@
 package io.tripled.elevator;
 
-public enum Direction {
+public enum ElevatorAction {
     UP,
     DOWN,
-    NONE,
+    OPEN_DOORS
 }
