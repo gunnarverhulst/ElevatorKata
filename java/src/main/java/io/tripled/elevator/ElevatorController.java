@@ -1,6 +1,9 @@
 package io.tripled.elevator;
 
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
+
 
 public class ElevatorController {
 
@@ -21,8 +24,55 @@ public class ElevatorController {
 
         while(!elevatorCalls.isEmpty()){
             ElevatorCall firstElevatorCall = getFirstElevatorCall();
-            handleCall(firstElevatorCall);
+            List<ElevatorCall> processableCalls = scanForProcessableCalls(firstElevatorCall);
+            handleCalls(processableCalls);
         }
+    }
+
+    private void handleCalls(List<ElevatorCall> processableCalls) {
+        List<Integer> floorStopsInProcessableCalls = createFloorStopsInOrder(processableCalls);
+        for(int floor : floorStopsInProcessableCalls){
+            moveElevatorToTarget(floor);
+        }
+    }
+
+    private List<Integer> createFloorStopsInOrder(List<ElevatorCall> processableCalls) {
+        List<Integer> floorStops = new ArrayList<>();
+        Direction direction = getDirection(processableCalls.get(0));
+        for(ElevatorCall call: processableCalls){
+            floorStops.add(call.callOrigin());
+            floorStops.add(call.callDestination());
+        }
+        if(direction == Direction.UP){
+            Collections.sort(floorStops);
+        } else if(direction == Direction.DOWN){
+            Collections.sort(floorStops, Collections.reverseOrder());
+        }
+        return floorStops;
+    }
+
+    private Direction getDirection(ElevatorCall elevatorCall) {
+        if(elevatorCall.callOrigin() < elevatorCall.callDestination()){
+            return Direction.UP;
+        } else if(elevatorCall.callOrigin() > elevatorCall.callDestination()){
+            return Direction.DOWN;
+        }
+        return Direction.NONE;
+    }
+
+    private List<ElevatorCall> scanForProcessableCalls(ElevatorCall currentlyProcessedCall) {
+        List<ElevatorCall> processableCalls = new ArrayList<>();
+        if(!elevatorCalls.isEmpty()){
+            for(int i = 0; i < elevatorCalls.size(); i++){
+                ElevatorCall elevatorCall = elevatorCalls.get(i);
+                if(elevatorCall.callOrigin() >= currentlyProcessedCall.callOrigin() && elevatorCall.callDestination() <= currentlyProcessedCall.callDestination()){
+                    processableCalls.add(elevatorCall);
+                    removeCallFromElevatorCalls(i);
+                }
+            }
+        }
+        processableCalls.add(0,currentlyProcessedCall);
+        return processableCalls;
     }
 
     private ElevatorCall getFirstElevatorCall() {
