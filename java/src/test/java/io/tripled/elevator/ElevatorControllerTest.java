@@ -53,12 +53,20 @@ class ElevatorControllerTest {
     }
 
     @Test
-    public void handleInputWith2DistinctCalls(){
-        Optional<List<ElevatorCall>> parsedInput = CallParser.CALL_PARSER.parse("1-2 3-5");
+    public void handleInputWith2DistinctCalls1To2And3To5(){
+        Optional<List<ElevatorCall>> parsedInputCalls = CallParser.CALL_PARSER.parse("1-2 3-5");
         List<ElevatorCall> expectedCalls = new ArrayList<>();
         expectedCalls.add(new ElevatorCall(1,2));
         expectedCalls.add(new ElevatorCall(3,5));
 
-        assertEquals(Optional.of(expectedCalls), parsedInput);
+        assertEquals(Optional.of(expectedCalls), parsedInputCalls);
+    }
+
+    @Test
+    public void displayFinalFloorHandle2Calls1To2And3To5(){
+        Optional<List<ElevatorCall>> parsedInputCalls = CallParser.CALL_PARSER.parse("1-2 3-5");
+        elevatorController.handleCommandWithMultipleCalls(parsedInputCalls.get());
+
+        assertEquals(5, elevatorController.getCurrentElevatorFloor());
     }
 }

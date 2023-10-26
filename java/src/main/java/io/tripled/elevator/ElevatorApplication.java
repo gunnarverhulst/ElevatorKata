@@ -1,6 +1,8 @@
 package io.tripled.elevator;
 
 
+import java.util.List;
+import java.util.Optional;
 import java.util.Scanner;
 
 import static io.tripled.elevator.CallParser.CALL_PARSER;
@@ -42,8 +44,9 @@ public class ElevatorApplication {
 
     private String handleMoveCommand(String input) {
         return CALL_PARSER
-                .parseSingleCall(input)
-                .map(this::handleCall)
+                .parse(input)
+//                .parseSingleCall(input)
+                .map(this::handleCommandWithMultipleCalls)
                 .orElseGet(this::apiMessage);
     }
 
@@ -56,6 +59,12 @@ public class ElevatorApplication {
     private String handleCall(ElevatorCall elevatorCall) {
         final String message = "A call was received from the floor [" + elevatorCall.callOrigin() + "] with destination [" + elevatorCall.callDestination() + "]";
         controller.handleCall(elevatorCall);
+        return message;
+    }
+
+    private String handleCommandWithMultipleCalls(List<ElevatorCall> elevatorCalls) {
+        final String message = "";
+        controller.handleCommandWithMultipleCalls(elevatorCalls);
         return message;
     }
 

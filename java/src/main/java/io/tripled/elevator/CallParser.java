@@ -12,21 +12,24 @@ public enum CallParser {
     CALL_PARSER;
 
 
-
     public Optional<List<ElevatorCall>> parse(String input) {
         List<ElevatorCall> elevatorCalls = new ArrayList<>();
         final String[] splitCalls = input.split(" ");
 
         for (String splitCall : splitCalls) {
-            if (parseSingleCall(splitCall).isPresent()){
-                elevatorCalls.add(parseSingleCall(splitCall).get());
-            }
+            addCallToElevatorCalls(splitCall, elevatorCalls);
         }
 
-        if(elevatorCalls.isEmpty()){
-            return empty();
-        } else {
+        if(!elevatorCalls.isEmpty()){
             return Optional.of(elevatorCalls);
+        }
+
+        return empty();
+    }
+
+    private void addCallToElevatorCalls(String splitCall, List<ElevatorCall> elevatorCalls) {
+        if (parseSingleCall(splitCall).isPresent()){
+            elevatorCalls.add(parseSingleCall(splitCall).get());
         }
     }
 
