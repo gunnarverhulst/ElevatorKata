@@ -35,10 +35,7 @@ public class ElevatorController {
 
         while(!elevatorCalls.isEmpty()){
             ElevatorCall firstElevatorCall = getFirstElevatorCall();
-            if(currentElevatorFloor != firstElevatorCall.callOrigin()){
-                elevatorCalls.add(0,firstElevatorCall);
-                firstElevatorCall = new ElevatorCall(currentElevatorFloor, firstElevatorCall.callOrigin());
-            }
+
             List<ElevatorCall> processableCalls = new ArrayList<>();
             processableCalls.add(firstElevatorCall);
             processableCalls.addAll(scanForProcessableCalls(firstElevatorCall));
