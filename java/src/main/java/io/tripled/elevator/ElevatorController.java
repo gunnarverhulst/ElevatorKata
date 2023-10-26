@@ -10,6 +10,24 @@ public class ElevatorController {
 
     public void handleCall(ElevatorCall call) {
         //TODO
+        while(currentElevatorFloor != call.callOrigin()){
+            if(currentElevatorFloor < call.callOrigin()){
+                moveElevatorOneFloor(Direction.UP);
+            } else if(currentElevatorFloor > call.callOrigin()){
+                moveElevatorOneFloor(Direction.DOWN);
+            }
+        }
+        System.out.println("<DING> - door open at " + FloorParser.FLOOR_PARSER.toText(currentElevatorFloor));
+
+        while(currentElevatorFloor != call.callDestination()){
+            if(currentElevatorFloor < call.callDestination()){
+                moveElevatorOneFloor(Direction.UP);
+            } else if(currentElevatorFloor > call.callDestination()){
+                moveElevatorOneFloor(Direction.DOWN);
+            }
+        }
+        System.out.println("<DING> - door open at " + FloorParser.FLOOR_PARSER.toText(currentElevatorFloor));
+
     }
 
     public int getCurrentElevatorFloor() {
@@ -24,6 +42,6 @@ public class ElevatorController {
         } else if(direction == Direction.DOWN && currentElevatorFloor > bottomFloor){
             currentElevatorFloor--;
         }
-
+        System.out.println("Elevator at "+ FloorParser.FLOOR_PARSER.toText(currentElevatorFloor));
     }
 }
