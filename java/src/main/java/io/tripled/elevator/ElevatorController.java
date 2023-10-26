@@ -48,10 +48,8 @@ public class ElevatorController {
     }
 
     public boolean isElevatorWithinBoundaryFloors(){
-        return (currentElevatorFloor < topFloorBoundary && currentElevatorFloor > bottomFloorBoundary) ? true : false;
+        return (currentElevatorFloor <= topFloorBoundary && currentElevatorFloor >= bottomFloorBoundary) ? true : false;
     }
-
-
 
     private void printElevatorState(ElevatorAction elevatorAction) {
         System.out.println(ElevatorStateParser.ELEVATOR_STATE_PARSER.printElevatorState(elevatorAction, currentElevatorFloor));
