@@ -13,4 +13,8 @@ public class ElevatorController {
         //TODO
         return currentElevatorFloor;
     }
+
+    public void moveElevatorOneFloorUp() {
+        currentElevatorFloor++;
+    }
 }
