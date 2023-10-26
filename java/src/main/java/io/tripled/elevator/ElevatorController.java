@@ -14,11 +14,12 @@ public class ElevatorController {
         return currentElevatorFloor;
     }
 
-    public void moveElevatorOneFloorUp() {
-        currentElevatorFloor++;
-    }
+    public void moveElevatorOneFloor(Direction direction) {
+        if(direction == Direction.UP){
+            currentElevatorFloor++;
+        } else if(direction == Direction.DOWN){
+            currentElevatorFloor--;
+        }
 
-    public void moveElevatorOneFloorDown() {
-        currentElevatorFloor--;
     }
 }

@@ -17,14 +17,14 @@ class ElevatorControllerTest {
     @Test
     public void displayFloorAfterMoveElevatorOneFloorUp(){
         ElevatorController elevatorController = new ElevatorController();
-        elevatorController.moveElevatorOneFloorUp();
+        elevatorController.moveElevatorOneFloor(Direction.UP);
         assertEquals(1, elevatorController.getCurrentElevatorFloor());
     }
 
     @Test
     public void displayFloorAfterMoveElevatorOneFloorDown(){
         ElevatorController elevatorController = new ElevatorController();
-        elevatorController.moveElevatorOneFloorDown();
+        elevatorController.moveElevatorOneFloor(Direction.DOWN);
         assertEquals(-1, elevatorController.getCurrentElevatorFloor());
     }
 
