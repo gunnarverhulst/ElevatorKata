@@ -102,5 +102,20 @@ class ElevatorControllerTest {
         assertEquals(1, elevatorController.getCurrentElevatorFloor());
     }
 
+    @Test
+    public void displayFinalFloorHandleCallsWhileMovingToOrigin(){
+        ElevatorController elevatorController = new ElevatorController();
+        Optional<List<ElevatorCall>> parsedInputCalls = CallParser.CALL_PARSER.parse("3-5 1-2");
+        parsedInputCalls.ifPresent(elevatorController::handleCommandWithMultipleCallsWithoutWaiting);
 
+        assertEquals(5, elevatorController.getCurrentElevatorFloor());
+    }
+
+    @Test
+    public void displayFinalFloorHandleCallsWhileMovingToOriginPart3Complex(){
+        Optional<List<ElevatorCall>> parsedInputCalls = CallParser.CALL_PARSER.parse("1-3 2-4 g-2 1-2 3-5 3-b 5-g 4-2 2-1 b-1");
+        parsedInputCalls.ifPresent(elevatorController::handleCommandWithMultipleCallsWithoutWaiting);
+
+        assertEquals(0, elevatorController.getCurrentElevatorFloor());
+    }
 }
