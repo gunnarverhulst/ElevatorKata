@@ -65,11 +65,14 @@ public class ElevatorController {
     private List<ElevatorCall> scanForProcessableCalls(ElevatorCall currentlyProcessedCall) {
         List<ElevatorCall> processableCalls = new ArrayList<>();
         if(!elevatorCalls.isEmpty()){
-            for(int i = 0; i < elevatorCalls.size(); i++){
+            int i = 0;
+            while(i < elevatorCalls.size()){
                 ElevatorCall elevatorCall = elevatorCalls.get(i);
                 if(isOnRouteCall(currentlyProcessedCall, elevatorCall)){
                     processableCalls.add(elevatorCall);
                     removeCallFromElevatorCalls(i);
+                } else {
+                    i++;
                 }
             }
         }
@@ -124,9 +127,9 @@ public class ElevatorController {
     }
 
     public void moveElevatorOneFloor(ElevatorAction elevatorAction) {
-        if(elevatorAction == ElevatorAction.UP && isElevatorWithinBoundaryFloors()){
+        if(elevatorAction == ElevatorAction.UP && currentElevatorFloor < topFloorBoundary ){
             currentElevatorFloor++;
-        } else if(elevatorAction == ElevatorAction.DOWN && isElevatorWithinBoundaryFloors()){
+        } else if(elevatorAction == ElevatorAction.DOWN && currentElevatorFloor > bottomFloorBoundary){
             currentElevatorFloor--;
         } else {
             return;
