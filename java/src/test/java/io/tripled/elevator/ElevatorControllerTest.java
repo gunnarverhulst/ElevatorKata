@@ -77,4 +77,12 @@ class ElevatorControllerTest {
 
         assertEquals(4, elevatorController.getCurrentElevatorFloor());
     }
+
+    @Test
+    public void displayFinalFloorHandleCalls1To3And2To4(){
+        Optional<List<ElevatorCall>> parsedInputCalls = CallParser.CALL_PARSER.parse("1-3 2-4");
+        parsedInputCalls.ifPresent(elevatorController::handleCommandWithMultipleCalls);
+
+        assertEquals(4, elevatorController.getCurrentElevatorFloor());
+    }
 }
