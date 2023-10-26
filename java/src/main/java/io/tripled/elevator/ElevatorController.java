@@ -1,7 +1,6 @@
 package io.tripled.elevator;
 
 import java.util.List;
-import java.util.Optional;
 
 public class ElevatorController {
 
@@ -9,6 +8,7 @@ public class ElevatorController {
     private final int topFloorBoundary = 5;
 
     private final int bottomFloorBoundary = -1;
+    private List<ElevatorCall> elevatorCalls;
 
     public void handleCall(ElevatorCall call) {
         //TODO
@@ -17,13 +17,22 @@ public class ElevatorController {
     }
 
     public void handleCommandWithMultipleCalls(List<ElevatorCall> parsedInputCalls) {
-        List<ElevatorCall> elevatorCalls = parsedInputCalls;
+        elevatorCalls = parsedInputCalls;
 
         while(!elevatorCalls.isEmpty()){
-            ElevatorCall firstElevatorCall = elevatorCalls.get(0);
-            elevatorCalls.remove(0);
+            ElevatorCall firstElevatorCall = getFirstElevatorCall();
             handleCall(firstElevatorCall);
         }
+    }
+
+    private ElevatorCall getFirstElevatorCall() {
+        ElevatorCall firstElevatorCall = elevatorCalls.get(0);
+        removeCallFromElevatorCalls(0);
+        return firstElevatorCall;
+    }
+
+    private void removeCallFromElevatorCalls(int callIndex) {
+        elevatorCalls.remove(callIndex);
     }
 
     private void moveElevatorToTarget(int targetFloor) {

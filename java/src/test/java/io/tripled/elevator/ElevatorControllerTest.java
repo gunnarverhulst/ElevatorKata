@@ -65,7 +65,7 @@ class ElevatorControllerTest {
     @Test
     public void displayFinalFloorHandle2Calls1To2And3To5(){
         Optional<List<ElevatorCall>> parsedInputCalls = CallParser.CALL_PARSER.parse("1-2 3-5");
-        elevatorController.handleCommandWithMultipleCalls(parsedInputCalls.get());
+        parsedInputCalls.ifPresent(elevatorController::handleCommandWithMultipleCalls);
 
         assertEquals(5, elevatorController.getCurrentElevatorFloor());
     }

@@ -2,7 +2,6 @@ package io.tripled.elevator;
 
 
 import java.util.List;
-import java.util.Optional;
 import java.util.Scanner;
 
 import static io.tripled.elevator.CallParser.CALL_PARSER;
