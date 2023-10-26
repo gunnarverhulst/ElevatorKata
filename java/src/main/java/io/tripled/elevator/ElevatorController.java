@@ -2,11 +2,10 @@ package io.tripled.elevator;
 
 public class ElevatorController {
 
-
     private int currentElevatorFloor = 0;
-    private final int topFloor = 5;
+    private final int topFloorBoundary = 5;
 
-    private final int bottomFloor = -1;
+    private final int bottomFloorBoundary = -1;
 
     public void handleCall(ElevatorCall call) {
         //TODO
@@ -16,14 +15,21 @@ public class ElevatorController {
 
     private void moveElevatorToTarget(int targetFloor) {
         while(currentElevatorFloor != targetFloor){
-            if(currentElevatorFloor < targetFloor){
-                moveElevatorOneFloor(ElevatorAction.UP);
-            } else if(currentElevatorFloor > targetFloor){
-                moveElevatorOneFloor(ElevatorAction.DOWN);
-            }
+            moveElevatorOneFloor(getElevatorAction(targetFloor));
         }
-        System.out.println(ElevatorStateParser.ELEVATOR_STATE_PARSER.printElevatorState(ElevatorAction.OPEN_DOORS, currentElevatorFloor));
+        printElevatorState(ElevatorAction.OPEN_DOORS);
     }
+
+    private ElevatorAction getElevatorAction(int targetFloor) {
+        if(currentElevatorFloor < targetFloor){
+            return ElevatorAction.UP;
+        } else if(currentElevatorFloor > targetFloor){
+            return ElevatorAction.DOWN;
+        } else {
+            return ElevatorAction.OPEN_DOORS;
+        }
+    }
+
 
     public int getCurrentElevatorFloor() {
         //TODO
@@ -31,13 +37,23 @@ public class ElevatorController {
     }
 
     public void moveElevatorOneFloor(ElevatorAction elevatorAction) {
-        if(elevatorAction == ElevatorAction.UP && currentElevatorFloor < topFloor){
+        if(elevatorAction == ElevatorAction.UP && isElevatorWithinBoundaryFloors()){
             currentElevatorFloor++;
-        } else if(elevatorAction == ElevatorAction.DOWN && currentElevatorFloor > bottomFloor){
+        } else if(elevatorAction == ElevatorAction.DOWN && isElevatorWithinBoundaryFloors()){
             currentElevatorFloor--;
         } else {
             return;
         }
+        printElevatorState(elevatorAction);
+    }
+
+    public boolean isElevatorWithinBoundaryFloors(){
+        return (currentElevatorFloor < topFloorBoundary && currentElevatorFloor > bottomFloorBoundary) ? true : false;
+    }
+
+
+
+    private void printElevatorState(ElevatorAction elevatorAction) {
         System.out.println(ElevatorStateParser.ELEVATOR_STATE_PARSER.printElevatorState(elevatorAction, currentElevatorFloor));
     }
 }
