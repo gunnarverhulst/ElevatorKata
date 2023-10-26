@@ -21,5 +21,12 @@ class ElevatorControllerTest {
         assertEquals(1, elevatorController.getCurrentElevatorFloor());
     }
 
+    @Test
+    public void displayFloorAfterMoveElevatorOneFloorDown(){
+        ElevatorController elevatorController = new ElevatorController();
+        elevatorController.moveElevatorOneFloorDown();
+        assertEquals(-1, elevatorController.getCurrentElevatorFloor());
+    }
+
 
 }

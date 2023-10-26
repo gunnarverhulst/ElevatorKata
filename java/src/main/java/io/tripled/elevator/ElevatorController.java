@@ -17,4 +17,8 @@ public class ElevatorController {
     public void moveElevatorOneFloorUp() {
         currentElevatorFloor++;
     }
+
+    public void moveElevatorOneFloorDown() {
+        currentElevatorFloor--;
+    }
 }
