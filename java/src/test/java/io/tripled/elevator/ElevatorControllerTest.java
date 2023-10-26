@@ -28,5 +28,12 @@ class ElevatorControllerTest {
         assertEquals(-1, elevatorController.getCurrentElevatorFloor());
     }
 
-
+    @Test
+    public void checkFloorBoundaryUp5(){
+        ElevatorController elevatorController = new ElevatorController();
+        for(int i = 0; i < 6; i++){
+            elevatorController.moveElevatorOneFloor(Direction.UP);
+        }
+        assertEquals(5, elevatorController.getCurrentElevatorFloor());
+    }
 }

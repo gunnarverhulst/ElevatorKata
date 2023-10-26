@@ -4,6 +4,7 @@ public class ElevatorController {
 
 
     private int currentElevatorFloor = 0;
+    private int topFloor = 5;
 
     public void handleCall(ElevatorCall call) {
         //TODO
@@ -15,7 +16,8 @@ public class ElevatorController {
     }
 
     public void moveElevatorOneFloor(Direction direction) {
-        if(direction == Direction.UP){
+
+        if(direction == Direction.UP && currentElevatorFloor < topFloor){
             currentElevatorFloor++;
         } else if(direction == Direction.DOWN){
             currentElevatorFloor--;
