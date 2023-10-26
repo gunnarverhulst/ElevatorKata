@@ -41,16 +41,24 @@ public class ElevatorController {
     private List<Integer> createFloorStopsInOrder(List<ElevatorCall> processableCalls) {
         List<Integer> floorStops = new ArrayList<>();
         Direction direction = getDirection(processableCalls.get(0));
+        buildFloorStops(processableCalls, floorStops);
+        sortFloorStops(direction, floorStops);
+        return floorStops;
+    }
+
+    private static void buildFloorStops(List<ElevatorCall> processableCalls, List<Integer> floorStops) {
         for(ElevatorCall call: processableCalls){
             floorStops.add(call.callOrigin());
             floorStops.add(call.callDestination());
         }
+    }
+
+    private static void sortFloorStops(Direction direction, List<Integer> floorStops) {
         if(direction == Direction.UP){
             Collections.sort(floorStops);
         } else if(direction == Direction.DOWN){
             Collections.sort(floorStops, Collections.reverseOrder());
         }
-        return floorStops;
     }
 
     private Direction getDirection(ElevatorCall elevatorCall) {
@@ -135,10 +143,6 @@ public class ElevatorController {
             return;
         }
         printElevatorState(elevatorAction);
-    }
-
-    public boolean isElevatorWithinBoundaryFloors(){
-        return (currentElevatorFloor < topFloorBoundary && currentElevatorFloor > bottomFloorBoundary);
     }
 
     private void printElevatorState(ElevatorAction elevatorAction) {
