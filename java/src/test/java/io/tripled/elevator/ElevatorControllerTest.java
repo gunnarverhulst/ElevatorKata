@@ -3,7 +3,6 @@ package io.tripled.elevator;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertTrue;
 
 
 class ElevatorControllerTest {
@@ -35,5 +34,14 @@ class ElevatorControllerTest {
             elevatorController.moveElevatorOneFloor(Direction.UP);
         }
         assertEquals(5, elevatorController.getCurrentElevatorFloor());
+    }
+
+    @Test
+    public void checkFloorBoundaryDownBasement(){
+        ElevatorController elevatorController = new ElevatorController();
+        for(int i = 0; i > -2; i--){
+            elevatorController.moveElevatorOneFloor(Direction.DOWN);
+        }
+        assertEquals(-1, elevatorController.getCurrentElevatorFloor());
     }
 }
