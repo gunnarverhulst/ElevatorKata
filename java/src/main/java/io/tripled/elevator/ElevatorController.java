@@ -24,7 +24,9 @@ public class ElevatorController {
 
         while(!elevatorCalls.isEmpty()){
             ElevatorCall firstElevatorCall = getFirstElevatorCall();
-            List<ElevatorCall> processableCalls = scanForProcessableCalls(firstElevatorCall);
+            List<ElevatorCall> processableCalls = new ArrayList<>();
+            processableCalls.add(firstElevatorCall);
+            processableCalls.addAll(scanForProcessableCalls(firstElevatorCall));
             handleCalls(processableCalls);
         }
     }
@@ -65,14 +67,27 @@ public class ElevatorController {
         if(!elevatorCalls.isEmpty()){
             for(int i = 0; i < elevatorCalls.size(); i++){
                 ElevatorCall elevatorCall = elevatorCalls.get(i);
-                if(elevatorCall.callOrigin() >= currentlyProcessedCall.callOrigin() && elevatorCall.callDestination() <= currentlyProcessedCall.callDestination()){
+                if(isOnRouteCall(currentlyProcessedCall, elevatorCall)){
                     processableCalls.add(elevatorCall);
                     removeCallFromElevatorCalls(i);
                 }
             }
         }
-        processableCalls.add(0,currentlyProcessedCall);
         return processableCalls;
+    }
+
+    public boolean isOnRouteCall(ElevatorCall currentlyProcessedCall, ElevatorCall callToBeChecked){
+        Direction currentlyProcessedCallDirection = getDirection(currentlyProcessedCall);
+        Direction callToBeCheckedDirection = getDirection(callToBeChecked);
+
+        if( currentlyProcessedCallDirection == callToBeCheckedDirection && currentlyProcessedCallDirection == Direction.UP){
+            return callToBeChecked.callOrigin() >= currentlyProcessedCall.callOrigin() && callToBeChecked.callDestination() <= currentlyProcessedCall.callDestination();
+        } else if(currentlyProcessedCallDirection == callToBeCheckedDirection && currentlyProcessedCallDirection == Direction.DOWN){
+            return callToBeChecked.callOrigin() <= currentlyProcessedCall.callOrigin() && callToBeChecked.callDestination() >= currentlyProcessedCall.callDestination();
+        }
+
+        return false;
+
     }
 
     private ElevatorCall getFirstElevatorCall() {
