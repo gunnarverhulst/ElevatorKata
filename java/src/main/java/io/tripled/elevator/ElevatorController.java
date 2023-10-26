@@ -112,10 +112,13 @@ public class ElevatorController {
     }
 
     private void moveElevatorToTarget(int targetFloor) {
-        while(currentElevatorFloor != targetFloor){
-            moveElevatorOneFloor(getElevatorAction(targetFloor));
+        if(currentElevatorFloor != targetFloor){
+            while(currentElevatorFloor != targetFloor){
+                moveElevatorOneFloor(getElevatorAction(targetFloor));
+            }
+            printElevatorState(ElevatorAction.OPEN_DOORS);
         }
-        printElevatorState(ElevatorAction.OPEN_DOORS);
+
     }
 
     private ElevatorAction getElevatorAction(int targetFloor) {
