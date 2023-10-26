@@ -14,6 +14,7 @@ public class ElevatorController {
     }
 
     private void moveElevatorToTarget(int targetFloor) {
+        System.out.println("move to target floor" + targetFloor);
         while(currentElevatorFloor != targetFloor){
             moveElevatorOneFloor(getElevatorAction(targetFloor));
         }
@@ -48,7 +49,7 @@ public class ElevatorController {
     }
 
     public boolean isElevatorWithinBoundaryFloors(){
-        return (currentElevatorFloor <= topFloorBoundary && currentElevatorFloor >= bottomFloorBoundary) ? true : false;
+        return (currentElevatorFloor < topFloorBoundary && currentElevatorFloor > bottomFloorBoundary);
     }
 
     private void printElevatorState(ElevatorAction elevatorAction) {

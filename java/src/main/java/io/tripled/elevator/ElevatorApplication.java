@@ -42,7 +42,7 @@ public class ElevatorApplication {
 
     private String handleMoveCommand(String input) {
         return CALL_PARSER
-                .parse(input)
+                .parseSingleCall(input)
                 .map(this::handleCall)
                 .orElseGet(this::apiMessage);
     }
