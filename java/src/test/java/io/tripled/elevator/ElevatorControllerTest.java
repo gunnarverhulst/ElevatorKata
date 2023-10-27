@@ -65,7 +65,7 @@ class ElevatorControllerTest {
     @Test
     public void displayFinalFloorHandle2Calls1To2And3To5(){
         Optional<List<ElevatorCall>> parsedInputCalls = CallParser.CALL_PARSER.parse("1-2 3-5");
-        parsedInputCalls.ifPresent((calls) -> elevatorController.handleCommandWithMultipleCalls(calls, true));
+        parsedInputCalls.ifPresent(elevatorController::handleCommandWithMultipleCallsPart3);
 
         assertEquals(5, elevatorController.getCurrentElevatorFloor());
     }
@@ -73,7 +73,7 @@ class ElevatorControllerTest {
     @Test
     public void displayFinalFloorHandleCalls1To4And2To3(){
         Optional<List<ElevatorCall>> parsedInputCalls = CallParser.CALL_PARSER.parse("1-4 2-3");
-        parsedInputCalls.ifPresent((calls) -> elevatorController.handleCommandWithMultipleCalls(calls, true));
+        parsedInputCalls.ifPresent(elevatorController::handleCommandWithMultipleCallsPart3);
 
         assertEquals(4, elevatorController.getCurrentElevatorFloor());
     }
@@ -81,7 +81,7 @@ class ElevatorControllerTest {
     @Test
     public void displayFinalFloorHandleCalls1To3And2To4(){
         Optional<List<ElevatorCall>> parsedInputCalls = CallParser.CALL_PARSER.parse("1-3 2-4");
-        parsedInputCalls.ifPresent((calls) -> elevatorController.handleCommandWithMultipleCalls(calls, true));
+        parsedInputCalls.ifPresent(elevatorController::handleCommandWithMultipleCallsPart3);
 
         assertEquals(4, elevatorController.getCurrentElevatorFloor());
     }
@@ -89,7 +89,7 @@ class ElevatorControllerTest {
     @Test
     public void displayFinalFloorHandleCalls3To0And0Tob(){
         Optional<List<ElevatorCall>> parsedInputCalls = CallParser.CALL_PARSER.parse("3-0 0-b");
-        parsedInputCalls.ifPresent((calls) -> elevatorController.handleCommandWithMultipleCalls(calls, true));
+        parsedInputCalls.ifPresent(elevatorController::handleCommandWithMultipleCallsPart3);
 
         assertEquals(-1, elevatorController.getCurrentElevatorFloor());
     }
@@ -97,7 +97,7 @@ class ElevatorControllerTest {
     @Test
     public void displayFinalFloorHandleCallsPart2ComplexExample(){
         Optional<List<ElevatorCall>> parsedInputCalls = CallParser.CALL_PARSER.parse("1-3 2-4 g-2 1-2 3-5 3-b 5-g 4-2 2-1 b-1");
-        parsedInputCalls.ifPresent((calls) -> elevatorController.handleCommandWithMultipleCalls(calls, false));
+        parsedInputCalls.ifPresent(elevatorController::handleCommandWithMultipleCallsPart2);
 
         assertEquals(1, elevatorController.getCurrentElevatorFloor());
     }
@@ -106,7 +106,7 @@ class ElevatorControllerTest {
     public void displayFinalFloorHandleCallsWhileMovingToOrigin(){
         ElevatorController elevatorController = new ElevatorController();
         Optional<List<ElevatorCall>> parsedInputCalls = CallParser.CALL_PARSER.parse("3-5 1-2");
-        parsedInputCalls.ifPresent((calls) -> elevatorController.handleCommandWithMultipleCalls(calls, true));
+        parsedInputCalls.ifPresent(elevatorController::handleCommandWithMultipleCallsPart3);
 
         assertEquals(5, elevatorController.getCurrentElevatorFloor());
     }
@@ -114,7 +114,7 @@ class ElevatorControllerTest {
     @Test
     public void displayFinalFloorHandleCallsWhileMovingToOriginPart3Complex(){
         Optional<List<ElevatorCall>> parsedInputCalls = CallParser.CALL_PARSER.parse("1-3 2-4 g-2 1-2 3-5 3-b 5-g 4-2 2-1 b-1");
-        parsedInputCalls.ifPresent((calls) -> elevatorController.handleCommandWithMultipleCalls(calls, true));
+        parsedInputCalls.ifPresent(elevatorController::handleCommandWithMultipleCallsPart3);
 
         assertEquals(0, elevatorController.getCurrentElevatorFloor());
     }

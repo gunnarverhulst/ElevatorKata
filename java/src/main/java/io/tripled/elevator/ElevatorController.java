@@ -14,23 +14,32 @@ public class ElevatorController {
     private List<ElevatorCall> elevatorCalls = new ArrayList<>();
     private String message = "";
 
+    private boolean isPart3 = false;
+
     public void handleCall(ElevatorCall call) {
         //TODO
         moveElevatorToTarget(call.callOrigin());
         moveElevatorToTarget(call.callDestination());
     }
 
-    public String handleCommandWithMultipleCalls(List<ElevatorCall> parsedInputCalls, boolean isWithPart3) {
+    public String handleCommandWithMultipleCallsPart2(List<ElevatorCall> parsedInputCalls) {
         elevatorCalls.addAll(parsedInputCalls);
 
-        handleAllElevatorCalls(isWithPart3);
+        handleAllElevatorCalls();
         return message;
     }
 
+    public String handleCommandWithMultipleCallsPart3(List<ElevatorCall> parsedInputCalls) {
+        isPart3 = true;
+        elevatorCalls.addAll(parsedInputCalls);
 
-    private void handleAllElevatorCalls(boolean isWithPart3) {
+        handleAllElevatorCalls();
+        return message;
+    }
+
+    private void handleAllElevatorCalls() {
         while(!elevatorCalls.isEmpty()){
-            ElevatorCall firstElevatorCall = createFirstCallToBeProcessed(isWithPart3);
+            ElevatorCall firstElevatorCall = createFirstCallToBeProcessed();
             List<ElevatorCall> processableCalls = createAllProcessableCalls(firstElevatorCall);
             handleAllSelectedFloorStopsFromSelectedCalls(processableCalls);
         }
@@ -48,9 +57,10 @@ public class ElevatorController {
         return processableCalls;
     }
 
-    private ElevatorCall createFirstCallToBeProcessed(boolean isWithPart3) {
+
+    private ElevatorCall createFirstCallToBeProcessed() {
         ElevatorCall firstElevatorCall = getFirstElevatorCall();
-        if(currentElevatorFloor != firstElevatorCall.callOrigin() && isWithPart3){
+        if(currentElevatorFloor != firstElevatorCall.callOrigin() && isPart3){
             firstElevatorCall = new ElevatorCall(currentElevatorFloor, firstElevatorCall.callOrigin());
         } else {
             removeCallFromElevatorCalls(0);
