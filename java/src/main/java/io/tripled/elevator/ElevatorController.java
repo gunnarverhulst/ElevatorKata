@@ -11,7 +11,7 @@ public class ElevatorController {
     private final int topFloorBoundary = 5;
 
     private final int bottomFloorBoundary = -1;
-    private List<ElevatorCall> elevatorCalls;
+    private List<ElevatorCall> elevatorCalls = new ArrayList<>();
 
     public void handleCall(ElevatorCall call) {
         //TODO
@@ -19,39 +19,44 @@ public class ElevatorController {
         moveElevatorToTarget(call.callDestination());
     }
 
-    public void handleCommandWithMultipleCalls(List<ElevatorCall> parsedInputCalls) {
-        elevatorCalls = parsedInputCalls;
+    public void handleCommandWithMultipleCalls(List<ElevatorCall> parsedInputCalls, boolean isWithPart3) {
+        elevatorCalls.addAll(parsedInputCalls);
 
-        while(!elevatorCalls.isEmpty()){
-            ElevatorCall firstElevatorCall = getFirstElevatorCall();
-            List<ElevatorCall> processableCalls = new ArrayList<>();
-            processableCalls.add(firstElevatorCall);
-            processableCalls.addAll(scanForProcessableCalls(firstElevatorCall));
-            handleCalls(processableCalls);
-        }
-    }
-    public void handleCommandWithMultipleCallsWithoutWaiting(List<ElevatorCall> parsedInputCalls) {
-        elevatorCalls = parsedInputCalls;
-
-        while(!elevatorCalls.isEmpty()){
-            ElevatorCall firstElevatorCall = getFirstElevatorCall();
-            if(currentElevatorFloor != firstElevatorCall.callOrigin()){
-                elevatorCalls.add(0,firstElevatorCall);
-                firstElevatorCall = new ElevatorCall(currentElevatorFloor, firstElevatorCall.callOrigin());
-            }
-            List<ElevatorCall> processableCalls = new ArrayList<>();
-            processableCalls.add(firstElevatorCall);
-            processableCalls.addAll(scanForProcessableCalls(firstElevatorCall));
-            handleCalls(processableCalls);
-        }
+        handleAllElevatorCalls(isWithPart3);
     }
 
-    private void handleCalls(List<ElevatorCall> processableCalls) {
+
+    private void handleAllElevatorCalls(boolean isWithPart3) {
+        while(!elevatorCalls.isEmpty()){
+            ElevatorCall firstElevatorCall = createFirstCallToBeProcessed(isWithPart3);
+            List<ElevatorCall> processableCalls = createAllProcessableCalls(firstElevatorCall);
+            handleAllSelectedFloorStopsFromSelectedCalls(processableCalls);
+        }
+    }
+    private void handleAllSelectedFloorStopsFromSelectedCalls(List<ElevatorCall> processableCalls) {
         List<Integer> floorStopsInProcessableCalls = createFloorStopsInOrder(processableCalls);
         for(int floor : floorStopsInProcessableCalls){
             moveElevatorToTarget(floor);
         }
     }
+    private List<ElevatorCall> createAllProcessableCalls(ElevatorCall firstElevatorCall) {
+        List<ElevatorCall> processableCalls = new ArrayList<>();
+        processableCalls.add(firstElevatorCall);
+        processableCalls.addAll(buildProcessableCalls(firstElevatorCall));
+        return processableCalls;
+    }
+
+    private ElevatorCall createFirstCallToBeProcessed(boolean isWithPart3) {
+        ElevatorCall firstElevatorCall = getFirstElevatorCall();
+        if(currentElevatorFloor != firstElevatorCall.callOrigin() && isWithPart3){
+            firstElevatorCall = new ElevatorCall(currentElevatorFloor, firstElevatorCall.callOrigin());
+        } else {
+            removeCallFromElevatorCalls(0);
+        }
+        return firstElevatorCall;
+    }
+
+
 
     private List<Integer> createFloorStopsInOrder(List<ElevatorCall> processableCalls) {
         List<Integer> floorStops = new ArrayList<>();
@@ -85,18 +90,24 @@ public class ElevatorController {
         return Direction.NONE;
     }
 
-    private List<ElevatorCall> scanForProcessableCalls(ElevatorCall currentlyProcessedCall) {
+    private List<ElevatorCall> buildProcessableCalls(ElevatorCall currentlyProcessedCall) {
         List<ElevatorCall> processableCalls = new ArrayList<>();
         if(!elevatorCalls.isEmpty()){
-            int i = 0;
-            while(i < elevatorCalls.size()){
-                ElevatorCall elevatorCall = elevatorCalls.get(i);
-                if(isOnRouteCall(currentlyProcessedCall, elevatorCall)){
-                    processableCalls.add(elevatorCall);
-                    removeCallFromElevatorCalls(i);
-                } else {
-                    i++;
-                }
+            processableCalls = addEligibleCalls(currentlyProcessedCall);
+        }
+        return processableCalls;
+    }
+
+    private  List<ElevatorCall> addEligibleCalls(ElevatorCall currentlyProcessedCall) {
+        List<ElevatorCall> processableCalls = new ArrayList<>();
+        int i = 0;
+        while(i < elevatorCalls.size()){
+            ElevatorCall elevatorCall = elevatorCalls.get(i);
+            if(isOnRouteCall(currentlyProcessedCall, elevatorCall)){
+                processableCalls.add(elevatorCall);
+                removeCallFromElevatorCalls(i);
+            } else {
+                i++;
             }
         }
         return processableCalls;
@@ -117,9 +128,7 @@ public class ElevatorController {
     }
 
     private ElevatorCall getFirstElevatorCall() {
-        ElevatorCall firstElevatorCall = elevatorCalls.get(0);
-        removeCallFromElevatorCalls(0);
-        return firstElevatorCall;
+        return elevatorCalls.get(0);
     }
 
     private void removeCallFromElevatorCalls(int callIndex) {

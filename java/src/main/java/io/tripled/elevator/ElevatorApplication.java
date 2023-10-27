@@ -45,7 +45,7 @@ public class ElevatorApplication {
         return CALL_PARSER
                 .parse(input)
 //                .parseSingleCall(input)
-                .map(this::handleCommandWithMultipleCallsWithoutWaiting)
+                .map((calls) -> handleCommandWithMultipleCalls(calls, true))
                 .orElseGet(this::apiMessage);
     }
 
@@ -61,15 +61,9 @@ public class ElevatorApplication {
         return message;
     }
 
-    private String handleCommandWithMultipleCalls(List<ElevatorCall> elevatorCalls) {
+    private String handleCommandWithMultipleCalls(List<ElevatorCall> elevatorCalls, boolean isWithPart3) {
         final String message = "";
-        controller.handleCommandWithMultipleCalls(elevatorCalls);
-        return message;
-    }
-
-    private String handleCommandWithMultipleCallsWithoutWaiting(List<ElevatorCall> elevatorCalls) {
-        final String message = "";
-        controller.handleCommandWithMultipleCallsWithoutWaiting(elevatorCalls);
+        controller.handleCommandWithMultipleCalls(elevatorCalls, isWithPart3);
         return message;
     }
 
