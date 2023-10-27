@@ -12,6 +12,7 @@ public class ElevatorController {
 
     private final int bottomFloorBoundary = -1;
     private List<ElevatorCall> elevatorCalls = new ArrayList<>();
+    private String message = "";
 
     public void handleCall(ElevatorCall call) {
         //TODO
@@ -19,10 +20,11 @@ public class ElevatorController {
         moveElevatorToTarget(call.callDestination());
     }
 
-    public void handleCommandWithMultipleCalls(List<ElevatorCall> parsedInputCalls, boolean isWithPart3) {
+    public String handleCommandWithMultipleCalls(List<ElevatorCall> parsedInputCalls, boolean isWithPart3) {
         elevatorCalls.addAll(parsedInputCalls);
 
         handleAllElevatorCalls(isWithPart3);
+        return message;
     }
 
 
@@ -167,13 +169,13 @@ public class ElevatorController {
         } else if(elevatorAction == ElevatorAction.DOWN && currentElevatorFloor > bottomFloorBoundary){
             currentElevatorFloor--;
         } else {
-            return;
+            return ;
         }
         printElevatorState(elevatorAction);
     }
 
     private void printElevatorState(ElevatorAction elevatorAction) {
-        System.out.println(ElevatorStateParser.ELEVATOR_STATE_PARSER.printElevatorState(elevatorAction, currentElevatorFloor));
+        message += ElevatorStateParser.ELEVATOR_STATE_PARSER.printElevatorState(elevatorAction, currentElevatorFloor) + "\n";
     }
 
 

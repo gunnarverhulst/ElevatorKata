@@ -62,9 +62,7 @@ public class ElevatorApplication {
     }
 
     private String handleCommandWithMultipleCalls(List<ElevatorCall> elevatorCalls, boolean isWithPart3) {
-        final String message = "";
-        controller.handleCommandWithMultipleCalls(elevatorCalls, isWithPart3);
-        return message;
+        return controller.handleCommandWithMultipleCalls(elevatorCalls, isWithPart3);
     }
 
     private String apiMessage() {
