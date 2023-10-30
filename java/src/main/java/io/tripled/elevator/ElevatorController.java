@@ -125,7 +125,7 @@ public class ElevatorController {
         return processableCalls;
     }
 
-    public boolean isOnRouteCall(ElevatorCall currentlyProcessedCall, ElevatorCall callToBeChecked){
+    private boolean isOnRouteCall(ElevatorCall currentlyProcessedCall, ElevatorCall callToBeChecked){
         Direction currentlyProcessedCallDirection = getDirection(currentlyProcessedCall);
         Direction callToBeCheckedDirection = getDirection(callToBeChecked);
 
