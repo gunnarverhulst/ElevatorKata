@@ -30,6 +30,7 @@ class ElevatorControllerTest {
         assertEquals(-1, elevatorController.getCurrentElevatorFloor());
     }
 
+
     @Test
     public void checkFloorBoundaryUp5(){
         for(int i = 0; i < 6; i++){
