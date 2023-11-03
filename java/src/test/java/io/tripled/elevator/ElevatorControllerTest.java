@@ -119,4 +119,5 @@ class ElevatorControllerTest {
 
         assertEquals(0, elevatorController.getCurrentElevatorFloor());
     }
+
 }

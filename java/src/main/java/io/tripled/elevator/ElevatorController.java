@@ -2,7 +2,9 @@ package io.tripled.elevator;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
+import java.util.stream.Collectors;
 
 
 public class ElevatorController {
@@ -71,26 +73,35 @@ public class ElevatorController {
 
 
     private List<Integer> createFloorStopsInOrder(List<ElevatorCall> processableCalls) {
-        List<Integer> floorStops = new ArrayList<>();
+
         Direction direction = getDirection(processableCalls.get(0));
-        buildFloorStops(processableCalls, floorStops);
-        sortFloorStops(direction, floorStops);
+        List<Integer> floorStops = buildFloorStops(processableCalls);
+        floorStops = sortFloorStops(direction, floorStops);
         return floorStops;
     }
 
-    private static void buildFloorStops(List<ElevatorCall> processableCalls, List<Integer> floorStops) {
-        for(ElevatorCall call: processableCalls){
+    private static List<Integer> buildFloorStops(List<ElevatorCall> processableCalls) {
+        List<Integer> floorStops = new ArrayList<>();
+
+        processableCalls.forEach((call) -> {
             floorStops.add(call.callOrigin());
             floorStops.add(call.callDestination());
-        }
+        });
+
+        return floorStops;
+
     }
 
-    private static void sortFloorStops(Direction direction, List<Integer> floorStops) {
+    private static List<Integer> sortFloorStops(Direction direction, List<Integer> floorStops) {
+        List<Integer> sortedFloorStops = floorStops;
+
         if(direction == Direction.UP){
-            Collections.sort(floorStops);
+            sortedFloorStops.sort(Comparator.comparing((floorStop) -> floorStop));
         } else if(direction == Direction.DOWN){
-            Collections.sort(floorStops, Collections.reverseOrder());
+            sortedFloorStops.sort(Comparator.comparing((floorStop) -> floorStop, Comparator.reverseOrder()));
         }
+
+        return sortedFloorStops;
     }
 
     private Direction getDirection(ElevatorCall elevatorCall) {
@@ -107,21 +118,21 @@ public class ElevatorController {
         if(!elevatorCalls.isEmpty()){
             processableCalls = addEligibleCalls(currentlyProcessedCall);
         }
+
         return processableCalls;
     }
 
     private  List<ElevatorCall> addEligibleCalls(ElevatorCall currentlyProcessedCall) {
         List<ElevatorCall> processableCalls = new ArrayList<>();
-        int i = 0;
-        while(i < elevatorCalls.size()){
-            ElevatorCall elevatorCall = elevatorCalls.get(i);
-            if(isOnRouteCall(currentlyProcessedCall, elevatorCall)){
-                processableCalls.add(elevatorCall);
-                removeCallFromElevatorCalls(i);
-            } else {
-                i++;
-            }
-        }
+        List<ElevatorCall> removableCalls = new ArrayList<>();
+        elevatorCalls.stream()
+                .filter((call) -> isOnRouteCall(currentlyProcessedCall, call))
+                .forEach((call) -> {
+                    processableCalls.add(call);
+                    removableCalls.add(call);
+                });
+        removeCallsFromElevatorCalls(removableCalls);
+
         return processableCalls;
     }
 
@@ -145,6 +156,9 @@ public class ElevatorController {
 
     private void removeCallFromElevatorCalls(int callIndex) {
         elevatorCalls.remove(callIndex);
+    }
+    private void removeCallsFromElevatorCalls(List<ElevatorCall> calls) {
+        elevatorCalls.removeAll(calls);
     }
 
     private void moveElevatorToTarget(int targetFloor) {
