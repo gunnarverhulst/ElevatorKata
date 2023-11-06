@@ -44,7 +44,6 @@ public class ElevatorApplication {
     private String handleMoveCommand(String input) {
         return CALL_PARSER
                 .parse(input)
-//                .parseSingleCall(input)
                 .map(this::handleCommandWithMultipleCallsPart3)
                 .orElseGet(this::apiMessage);
     }
@@ -55,18 +54,9 @@ public class ElevatorApplication {
         return "The elevator is currently at " + FloorParser.FLOOR_PARSER.toText(currentElevatorFloor);
     }
 
-    private String handleCall(ElevatorCall elevatorCall) {
-        final String message = "A call was received from the floor [" + elevatorCall.callOrigin() + "] with destination [" + elevatorCall.callDestination() + "]";
-        controller.handleCall(elevatorCall);
-        return message;
-    }
-
-    private String handleCommandWithMultipleCallsPart2(List<ElevatorCall> elevatorCalls) {
-        return controller.handleCommandWithMultipleCallsPart2(elevatorCalls);
-    }
-
     private String handleCommandWithMultipleCallsPart3(List<ElevatorCall> elevatorCalls) {
-        return controller.handleCommandWithMultipleCallsPart3(elevatorCalls);
+        controller.handleCommandWithMultipleCallsPart3(elevatorCalls);
+        return "";
     }
 
     private String apiMessage() {

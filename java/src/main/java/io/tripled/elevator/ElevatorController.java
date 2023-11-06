@@ -1,42 +1,21 @@
 package io.tripled.elevator;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
-import java.util.stream.Collectors;
 
 
 public class ElevatorController {
 
     private int currentElevatorFloor = 0;
     private final int topFloorBoundary = 5;
-
     private final int bottomFloorBoundary = -1;
     private List<ElevatorCall> elevatorCalls = new ArrayList<>();
-    private String message = "";
 
-    private boolean isPart3 = false;
-
-    public void handleCall(ElevatorCall call) {
-        //TODO
-        moveElevatorToTarget(call.callOrigin());
-        moveElevatorToTarget(call.callDestination());
-    }
-
-    public String handleCommandWithMultipleCallsPart2(List<ElevatorCall> parsedInputCalls) {
+    public void handleCommandWithMultipleCallsPart3(List<ElevatorCall> parsedInputCalls) {
         elevatorCalls.addAll(parsedInputCalls);
 
         handleAllElevatorCalls();
-        return message;
-    }
-
-    public String handleCommandWithMultipleCallsPart3(List<ElevatorCall> parsedInputCalls) {
-        isPart3 = true;
-        elevatorCalls.addAll(parsedInputCalls);
-
-        handleAllElevatorCalls();
-        return message;
     }
 
     private void handleAllElevatorCalls() {
@@ -56,17 +35,18 @@ public class ElevatorController {
         List<ElevatorCall> processableCalls = new ArrayList<>();
         processableCalls.add(firstElevatorCall);
         processableCalls.addAll(buildProcessableCalls(firstElevatorCall));
+
         return processableCalls;
     }
 
-
     private ElevatorCall createFirstCallToBeProcessed() {
         ElevatorCall firstElevatorCall = getFirstElevatorCall();
-        if(currentElevatorFloor != firstElevatorCall.callOrigin() && isPart3){
+        if(currentElevatorFloor != firstElevatorCall.callOrigin()){
             firstElevatorCall = new ElevatorCall(currentElevatorFloor, firstElevatorCall.callOrigin());
         } else {
             removeCallFromElevatorCalls(0);
         }
+
         return firstElevatorCall;
     }
 
@@ -77,6 +57,7 @@ public class ElevatorController {
         Direction direction = getDirection(processableCalls.get(0));
         List<Integer> floorStops = buildFloorStops(processableCalls);
         floorStops = sortFloorStops(direction, floorStops);
+
         return floorStops;
     }
 
@@ -89,7 +70,6 @@ public class ElevatorController {
         });
 
         return floorStops;
-
     }
 
     private static List<Integer> sortFloorStops(Direction direction, List<Integer> floorStops) {
@@ -110,6 +90,7 @@ public class ElevatorController {
         } else if(elevatorCall.callOrigin() > elevatorCall.callDestination()){
             return Direction.DOWN;
         }
+
         return Direction.NONE;
     }
 
@@ -147,7 +128,6 @@ public class ElevatorController {
         }
 
         return false;
-
     }
 
     private ElevatorCall getFirstElevatorCall() {
@@ -168,7 +148,6 @@ public class ElevatorController {
             }
             printElevatorState(ElevatorAction.OPEN_DOORS);
         }
-
     }
 
     private ElevatorAction getElevatorAction(int targetFloor) {
@@ -199,8 +178,6 @@ public class ElevatorController {
     }
 
     private void printElevatorState(ElevatorAction elevatorAction) {
-        message += ElevatorStateParser.ELEVATOR_STATE_PARSER.printElevatorState(elevatorAction, currentElevatorFloor) + "\n";
+        System.out.println(ElevatorStateParser.ELEVATOR_STATE_PARSER.printElevatorState(elevatorAction, currentElevatorFloor));
     }
-
-
 }
