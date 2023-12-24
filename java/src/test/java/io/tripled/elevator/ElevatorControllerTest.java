@@ -11,6 +11,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 
 class ElevatorControllerTest {
 
+
     private final ElevatorController elevatorController = new ElevatorController();
 
     @Test
